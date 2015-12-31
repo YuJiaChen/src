@@ -163,6 +163,25 @@ BotPlayer.prototype.update = function() { // Overrides the update function from 
 };
 
 // Custom
+BotPlayer.prototype.setFeatures = function() {
+    cell = this.getLowestCell()
+    predators = this.findNearest(this.predators);
+    //this.findNearest(this.threats);
+    prey = this.findNearest(this.prey);
+    food = this.findNearest(this.food);
+    virus = this.findNearest(this.virus);
+
+    this.getVector(cell, prey);
+    this.getVector(cell, predators);
+    this.getVector(cell, food);
+
+    this.getAccDist(cell, prey);
+    this.getAccDist(cell, predators);
+    this.getAccDist(cell, food);
+
+    this.juke = false;
+    
+};
 
 BotPlayer.prototype.clearLists = function() {
     this.predators = [];
@@ -187,15 +206,22 @@ BotPlayer.prototype.getState = function(cell) {
             return 1;
         }
     } else if (this.threats.length > 0) {
-        if ((this.cells.length == 1) && (cell.mass > 180)) {
+        if ((this.cells.length == 1) ) {
             var t = this.getBiggest(this.threats);
             var tl = this.findNearbyVirus(t,500,this.virus);
             if (tl != false) {
-                this.target = t;
-                this.targetVirus = tl;
-                return 4;
+                if (cell.mass > 120){
+                    this.target = t;
+                    this.targetVirus = tl;
+                    return 4;
+                }
+                else {
+                    this.targetVirus = tl;
+                    return 5;
+                }
             }
-        } else {
+        }
+        else {
             // Run
             return 2;
         }
@@ -345,6 +371,10 @@ BotPlayer.prototype.decide = function(cell) {
 
             // console.log("[Bot] "+cell.getName()+": Targeting (virus) "+this.target.getName());
             break;
+        case 5: // hide into virus
+            console.log("hide into virus");
+            this.mouse = {x: this.targetVirus.position.x, y: this.targetVirus.position.y};
+            break;
         default:
             //console.log("[Bot] "+cell.getName()+": Idle "+this.gameState);
             this.gameState = 0;
@@ -472,6 +502,10 @@ BotPlayer.prototype.checkPath = function(cell,check) {
 
     // No collide
     return false;
+}
+
+BotPlayer.prototype.getVector = function (cell, check){
+    return [check.position.x - cell.position.x, check.position.y - cell.position.y];
 }
 
 BotPlayer.prototype.getDist = function(cell,check) {
