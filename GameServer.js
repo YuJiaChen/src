@@ -13,6 +13,8 @@ var Gamemode = require('./gamemodes');
 var BotLoader = require('./ai/BotLoader');
 var Logger = require('./modules/log');
 
+var PlayerAI = require('./ai/PlayerAI');
+
 // GameServer implementation
 function GameServer() {
     // Startup 
@@ -207,7 +209,8 @@ GameServer.prototype.start = function() {
         ws.remotePort = ws._socket.remotePort;
         this.log.onConnect(ws.remoteAddress); // Log connections
 
-        ws.playerTracker = new PlayerTracker(this, ws);
+        //ws.playerTracker = new PlayerTracker(this, ws);
+        ws.playerTracker = new PlayerAI(this, ws);
         ws.packetHandler = new PacketHandler(this, ws);
         ws.on('message', ws.packetHandler.handleMessage.bind(ws.packetHandler));
 
