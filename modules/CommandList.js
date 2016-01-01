@@ -29,7 +29,7 @@ Commands.list = {
     help: function(gameServer,split) {
         console.log("[Console] ======================== HELP ======================");
         console.log("[Console] addbot     : add bot to the server");
-        console.log("[Console] addmybot   : add bot2 to the server");
+        console.log("[Console] addmybot   : add my bot to the server");
         console.log("[Console] board      : set scoreboard text");
         console.log("[Console] boardreset : reset scoreboard text");
         console.log("[Console] change     : change specified settings");
@@ -71,7 +71,7 @@ Commands.list = {
         for (var i = 0; i < add; i++) {
             gameServer.bots.addMyBot();
         }
-        console.log("[Console] Added "+add+" player bots");
+        console.log("[Console] Added "+add+" my player bots");
     },
     board: function(gameServer,split) {
         var newLB = [];

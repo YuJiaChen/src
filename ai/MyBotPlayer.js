@@ -1,6 +1,6 @@
 var PlayerTracker = require('../PlayerTracker');
 
-function BotPlayer() {
+function MyBotPlayer() {
     PlayerTracker.apply(this, Array.prototype.slice.call(arguments));
     //this.color = gameServer.getRandomColor();
 
@@ -24,12 +24,12 @@ function BotPlayer() {
     this.oldPos = {x: 0, y:0};
 }
 
-module.exports = BotPlayer;
-BotPlayer.prototype = new PlayerTracker();
+module.exports = MyBotPlayer;
+MyBotPlayer.prototype = new PlayerTracker();
 
 // Functions
 
-BotPlayer.prototype.getLowestCell = function() {
+MyBotPlayer.prototype.getLowestCell = function() {
     // Gets the cell with the lowest mass
     if (this.cells.length <= 0) {
         return null; // Error!
@@ -47,7 +47,7 @@ BotPlayer.prototype.getLowestCell = function() {
 
 // Override
 
-BotPlayer.prototype.updateSightRange = function() { // For view distance
+MyBotPlayer.prototype.updateSightRange = function() { // For view distance
     var range = 1000; // Base sight range
 
     if (this.cells[0]) {
@@ -58,7 +58,7 @@ BotPlayer.prototype.updateSightRange = function() { // For view distance
     this.sightRangeY = range;
 };
 
-BotPlayer.prototype.update = function() { // Overrides the update function from player tracker
+MyBotPlayer.prototype.update = function() { // Overrides the update function from player tracker
     // Remove nodes from visible nodes if possible
     for (var i = 0; i < this.nodeDestroyQueue.length; i++) {
         var index = this.visibleNodes.indexOf(this.nodeDestroyQueue[i]);
@@ -164,7 +164,7 @@ BotPlayer.prototype.update = function() { // Overrides the update function from 
 
 // Custom
 
-BotPlayer.prototype.clearLists = function() {
+MyBotPlayer.prototype.clearLists = function() {
     this.predators = [];
     this.threats = [];
     this.prey = [];
@@ -173,7 +173,7 @@ BotPlayer.prototype.clearLists = function() {
     this.juke = false;
 };
 
-BotPlayer.prototype.getState = function(cell) {
+MyBotPlayer.prototype.getState = function(cell) {
     // Continue to shoot viruses
     if (this.gameState == 4) {
         return 4;
@@ -205,7 +205,7 @@ BotPlayer.prototype.getState = function(cell) {
     return 0;
 };
 
-BotPlayer.prototype.decide = function(cell) {
+MyBotPlayer.prototype.decide = function(cell) {
     // The bot decides what to do based on gamestate
     switch (this.gameState) {
         case 0: // Wander
@@ -369,7 +369,7 @@ BotPlayer.prototype.decide = function(cell) {
 };
 
 // Finds the nearest cell in list
-BotPlayer.prototype.findNearest = function(cell,list) {
+MyBotPlayer.prototype.findNearest = function(cell,list) {
     if (this.currentTarget) {
         // Do not check for food if target already exists
         return null;
@@ -390,13 +390,13 @@ BotPlayer.prototype.findNearest = function(cell,list) {
     return shortest;
 };
 
-BotPlayer.prototype.getRandom = function(list) {
+MyBotPlayer.prototype.getRandom = function(list) {
     // Gets a random cell from the array
     var n = Math.floor(Math.random() * list.length);
     return list[n];
 };
 
-BotPlayer.prototype.combineVectors = function(list) {
+MyBotPlayer.prototype.combineVectors = function(list) {
     // Gets the angles of all enemies approaching the cell
     var pos = {x: 0, y: 0};
     var check;
@@ -413,7 +413,7 @@ BotPlayer.prototype.combineVectors = function(list) {
     return pos;
 };
 
-BotPlayer.prototype.checkPath = function(cell,check) {
+MyBotPlayer.prototype.checkPath = function(cell,check) {
     // Checks if the cell is in the way
 
     // Get angle of vector (cell -> path)
@@ -430,7 +430,7 @@ BotPlayer.prototype.checkPath = function(cell,check) {
     }
 };
 
-BotPlayer.prototype.getBiggest = function(list) {
+MyBotPlayer.prototype.getBiggest = function(list) {
     // Gets the biggest cell from the array
     var biggest = list[0];
     for (var i = 1; i < list.length; i++) {
@@ -443,7 +443,7 @@ BotPlayer.prototype.getBiggest = function(list) {
     return biggest;
 };
 
-BotPlayer.prototype.findNearbyVirus = function(cell,checkDist,list) {
+MyBotPlayer.prototype.findNearbyVirus = function(cell,checkDist,list) {
     var r = cell.getSize() + 100; // Gets radius + virus radius
     for (var i = 0; i < list.length; i++) {
         var check = list[i];
@@ -455,7 +455,7 @@ BotPlayer.prototype.findNearbyVirus = function(cell,checkDist,list) {
     return false; // Returns a bool if no nearby viruses are found
 };
 
-BotPlayer.prototype.checkPath = function(cell,check) {
+MyBotPlayer.prototype.checkPath = function(cell,check) {
     // Get angle of path
     var v1 = Math.atan2(cell.position.x - player.mouse.x,cell.position.y - player.mouse.y);
 
@@ -474,7 +474,7 @@ BotPlayer.prototype.checkPath = function(cell,check) {
     return false;
 }
 
-BotPlayer.prototype.getDist = function(cell,check) {
+MyBotPlayer.prototype.getDist = function(cell,check) {
     // Fastest distance - I have a crappy computer to test with :(
     var xd = (check.position.x - cell.position.x);
     xd = xd < 0 ? xd * -1 : xd; // Math.abs is slow
@@ -485,7 +485,7 @@ BotPlayer.prototype.getDist = function(cell,check) {
     return (xd + yd);
 };
 
-BotPlayer.prototype.getAccDist = function(cell,check) {
+MyBotPlayer.prototype.getAccDist = function(cell,check) {
     // Accurate Distance
     var xs = check.position.x - cell.position.x;
     xs = xs * xs;
@@ -496,13 +496,13 @@ BotPlayer.prototype.getAccDist = function(cell,check) {
     return Math.sqrt( xs + ys );
 };
 
-BotPlayer.prototype.getAngle = function(c1,c2) {
+MyBotPlayer.prototype.getAngle = function(c1,c2) {
     var deltaY = c1.position.y - c2.position.y;
     var deltaX = c1.position.x - c2.position.x;
     return Math.atan2(deltaX,deltaY);
 };
 
-BotPlayer.prototype.reverseAngle = function(angle) {
+MyBotPlayer.prototype.reverseAngle = function(angle) {
     if (angle > Math.PI) {
         angle -= Math.PI;
     } else {
