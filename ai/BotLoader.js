@@ -26,6 +26,21 @@ BotLoader.prototype.getName = function() {
     return name;
 };
 
+BotLoader.prototype.myGetName = function() {
+    var name = "";
+
+    // Picks a random name for the bot
+    if (this.randomNames.length > 0) {
+        var index = Math.floor(Math.random() * this.randomNames.length);
+        name = this.randomNames[index];
+        this.randomNames.splice(index,1);
+    } else {
+        name = "mybot" + ++this.nameIndex;
+    }
+
+    return name;
+};
+
 BotLoader.prototype.loadNames = function() {
     this.randomNames = [];
 
@@ -65,6 +80,6 @@ BotLoader.prototype.addMyBot = function() {
     this.gameServer.clients.push(s);
 
     // Add to world
-    s.packetHandler.setNickname(this.getName());
+    s.packetHandler.setNickname(this.myGetName());
 };
 

@@ -199,31 +199,25 @@ BotPlayer.prototype.getState = function(cell) {
     }
 
     // Check for predators
-    if (this.predators.length <= 0) {
-        if (this.prey.length > 0) {
-            return 3;
-        } else if (this.food.length > 0) {
-            return 1;
-        }
-    } else if (this.threats.length > 0) {
-        if ((this.cells.length == 1) ) {
+    if (this.threats.length > 0) {
+        if ((this.cells.length == 1) && this.predators.length > 0) {
             var t = this.getBiggest(this.threats);
             var tl = this.findNearbyVirus(t,500,this.virus);
             if (tl != false) {
-                if (cell.mass > 120){
-                    this.target = t;
-                    this.targetVirus = tl;
-                    return 4;
-                }
-                else {
+                if (cell.mass < 120){
                     this.targetVirus = tl;
                     return 5;
                 }
             }
         }
-        else {
-            // Run
-            return 2;
+        // Run
+        return 2;
+    }
+    else if (this.predators.length <= 0) {
+        if (this.prey.length > 0) {
+            return 3;
+        } else if (this.food.length > 0) {
+            return 1;
         }
     }
 
@@ -233,6 +227,7 @@ BotPlayer.prototype.getState = function(cell) {
 
 BotPlayer.prototype.decide = function(cell) {
     // The bot decides what to do based on gamestate
+
     switch (this.gameState) {
         case 0: // Wander
             //console.log("[Bot] "+cell.getName()+": Wandering");
@@ -264,7 +259,9 @@ BotPlayer.prototype.decide = function(cell) {
             }
             break;
         case 2: // Run from (potential) predators
-            var avoid = this.combineVectors(this.predators);
+            var avoid = this.combineVectors(this.threats);
+            if (this.predators.length > 0)
+              avoid = this.combineVectors(this.predators);
             //console.log("[Bot] "+cell.getName()+": Fleeing from "+avoid.getName());
 
             // Find angle of vector between cell and predator
@@ -285,16 +282,11 @@ BotPlayer.prototype.decide = function(cell) {
 
             this.mouse = {x: x1, y: y1};
 
-            // Cheating
-            if (cell.mass < 250) {
-                cell.mass += 1;
-            } 
-
             if (this.juke) {
                 // Juking
                 this.gameServer.splitCells(this);
             }
-
+            console.log(this.mouse);
             break;
         case 3: // Target prey
             if ((!this.target) || (cell.mass < (this.target.mass * 1.25)) || (this.visibleNodes.indexOf(this.target) == -1)) {
@@ -374,6 +366,26 @@ BotPlayer.prototype.decide = function(cell) {
         case 5: // hide into virus
             console.log("hide into virus");
             this.mouse = {x: this.targetVirus.position.x, y: this.targetVirus.position.y};
+            if (this.getDist(cell, this.targetVirus) > this.getDist(this.predators[0], this.targetVirus))
+                console.log("Dont hide in to virus");
+                var avoid = this.combineVectors(this.predators);
+
+                // Find angle of vector between cell and predator
+                var deltaY = avoid.y - cell.position.y;
+                var deltaX = avoid.x - cell.position.x;
+                var angle = Math.atan2(deltaX,deltaY);
+
+                // Now reverse the angle
+                if (angle > Math.PI) {
+                    angle -= Math.PI;
+                } else {
+                    angle += Math.PI;
+                }
+
+                // Direction to move
+                var x1 = cell.position.x + (500 * Math.sin(angle));
+                var y1 = cell.position.y + (500 * Math.cos(angle));
+                this.mouse = {x: x1, y:y1};
             break;
         default:
             //console.log("[Bot] "+cell.getName()+": Idle "+this.gameState);

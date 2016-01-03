@@ -38,6 +38,7 @@ Commands.list = {
         console.log("[Console] exit       : stop the server");
         console.log("[Console] food       : spawn food at specified Location");
         console.log("[Console] gamemode   : change server gamemode");
+        console.log("[Console] inform     : get player information by ID");
         console.log("[Console] kick       : kick player or bot by client ID");
         console.log("[Console] kill       : kill cell(s) by client ID");
         console.log("[Console] killall    : kill everyone");
@@ -176,6 +177,21 @@ Commands.list = {
             console.log("[Game] Changed game mode to " + gameServer.gameMode.name);
         } catch (e) {
             console.log("[Console] Invalid game mode selected");
+        }
+    },
+    inform: function(gameServer,split) {
+        // Validation checks
+        var id = parseInt(split[1]);
+        if (isNaN(id)) {
+            console.log("[Console] Please specify a valid player ID!");
+            return;
+        }
+        for (var i in gameServer.clients) {
+            if (gameServer.clients[i].playerTracker.pID == id) {
+                var client = gameServer.clients[i].playerTracker;
+                console.log(client);
+                break;
+            }
         }
     },
     kick: function(gameServer,split) {
