@@ -1,6 +1,7 @@
 // Project imports
 var BotPlayer = require('./BotPlayer');
 var MyBotPlayer = require('./MyBotPlayer');
+var GreedyBotPlayer = require('./GreedyBotPlayer');
 var FakeSocket = require('./FakeSocket');
 var PacketHandler = require('../PacketHandler');
 
@@ -11,7 +12,7 @@ function BotLoader(gameServer) {
 
 module.exports = BotLoader;
 
-BotLoader.prototype.getName = function(botSource) {
+BotLoader.prototype.getName = function(botAISource) {
     var name = "";
 
     // Picks a random name for the bot
@@ -19,26 +20,8 @@ BotLoader.prototype.getName = function(botSource) {
         var index = Math.floor(Math.random() * this.randomNames.length);
         name = this.randomNames[index];
         this.randomNames.splice(index,1);
-    } else if (botSource == "bot") {
-        name = "bot" + ++this.nameIndex;
-    } else {
-        name = "mybot" + ++this.myNameIndex;
-    }
-
-    return name;
-};
-
-BotLoader.prototype.myGetName = function() {
-    var name = "";
-
-    // Picks a random name for the bot
-    if (this.randomNames.length > 0) {
-        var index = Math.floor(Math.random() * this.randomNames.length);
-        name = this.randomNames[index];
-        this.randomNames.splice(index,1);
-    } else {
-        name = "mybot" + ++this.nameIndex;
-    }
+    } else
+        name = botAISource + ++this.nameIndex;
 
     return name;
 };
@@ -59,7 +42,6 @@ BotLoader.prototype.loadNames = function() {
     }
 
     this.nameIndex = 0;
-    this.myNameIndex = 0;
 };
 
 BotLoader.prototype.addBot = function() {
@@ -83,7 +65,19 @@ BotLoader.prototype.addMyBot = function() {
     this.gameServer.clients.push(s);
 
     // Add to world
-    s.packetHandler.setNickname(this.myGetName());
+    s.packetHandler.setNickname(this.getName("mybot"));
 
 };
 
+BotLoader.prototype.addGreedyBot = function() {
+    var s = new FakeSocket(this.gameServer);
+    s.playerTracker = new GreedyBotPlayer(this.gameServer, s);
+    s.packetHandler = new PacketHandler(this.gameServer, s);
+
+    // Add to client list
+    this.gameServer.clients.push(s);
+
+    // Add to world
+    s.packetHandler.setNickname(this.getName("greedybot"));
+
+};

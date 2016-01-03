@@ -65,28 +65,28 @@ PacketHandler.prototype.handleMessage = function(message) {
             break;
         case 16:
             // Set Target
-            ///*
+            /*
             if (view.byteLength == 13) {
                 var client = this.socket.playerTracker;
                 client.mouse.x = view.getInt32(1, true);
                 client.mouse.y = view.getInt32(5, true);
             }
-            //*/
+            */
             break;
         case 17:
             // Space Press - Split cell
-            this.pressSpace = true;
+            //this.pressSpace = true;
             break;
         case 18:
             // Q Key Pressed
-            this.pressQ = true;
+            //this.pressQ = true;
             break;
         case 19:
             // Q Key Released
             break;
         case 21:
             // W Press - Eject mass
-            this.pressW = true;
+            //this.pressW = true;
             break;
         case 255:
             // Connection Start 
