@@ -11,7 +11,7 @@ function BotLoader(gameServer) {
 
 module.exports = BotLoader;
 
-BotLoader.prototype.getName = function() {
+BotLoader.prototype.getName = function(botSource) {
     var name = "";
 
     // Picks a random name for the bot
@@ -19,8 +19,10 @@ BotLoader.prototype.getName = function() {
         var index = Math.floor(Math.random() * this.randomNames.length);
         name = this.randomNames[index];
         this.randomNames.splice(index,1);
-    } else {
+    } else if (botSource == "bot") {
         name = "bot" + ++this.nameIndex;
+    } else {
+        name = "mybot" + ++this.myNameIndex;
     }
 
     return name;
@@ -57,6 +59,7 @@ BotLoader.prototype.loadNames = function() {
     }
 
     this.nameIndex = 0;
+    this.myNameIndex = 0;
 };
 
 BotLoader.prototype.addBot = function() {
@@ -68,7 +71,7 @@ BotLoader.prototype.addBot = function() {
     this.gameServer.clients.push(s);
 
     // Add to world
-    s.packetHandler.setNickname(this.getName());
+    s.packetHandler.setNickname(this.getName("bot"));
 };
 
 BotLoader.prototype.addMyBot = function() {
@@ -81,5 +84,6 @@ BotLoader.prototype.addMyBot = function() {
 
     // Add to world
     s.packetHandler.setNickname(this.myGetName());
+
 };
 
