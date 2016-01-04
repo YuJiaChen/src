@@ -31,6 +31,8 @@ Commands.list = {
         console.log("[Console] addbot       : add bot to the server");
         console.log("[Console] addmybot     : add my bot to the server");
         console.log("[Console] addgreedybot : add greedy bot to the server");
+        console.log("[Console] addrndbot    : add random bot to the server");
+        console.log("[Console] addescbot    : add escape bot to the server");
         console.log("[Console] board        : set scoreboard text");
         console.log("[Console] boardreset   : reset scoreboard text");
         console.log("[Console] change       : change specified settings");
@@ -84,7 +86,29 @@ Commands.list = {
         for (var i = 0; i < add; i++) {
             gameServer.bots.addGreedyBot();
         }
-        console.log("[Console] Added "+add+" my player bots");
+        console.log("[Console] Added "+add+" greedy player bots");
+    },
+    addrndbot: function(gameServer,split) {
+        var add = parseInt(split[1]);
+        if (isNaN(add)) {
+            add = 1; // Adds 1 bot if user doesnt specify a number
+        }
+
+        for (var i = 0; i < add; i++) {
+            gameServer.bots.addRndBot();
+        }
+        console.log("[Console] Added "+add+" random player bots");
+    },
+    addescbot: function(gameServer,split) {
+        var add = parseInt(split[1]);
+        if (isNaN(add)) {
+            add = 1; // Adds 1 bot if user doesnt specify a number
+        }
+
+        for (var i = 0; i < add; i++) {
+            gameServer.bots.addEscBot();
+        }
+        console.log("[Console] Added "+add+" escape player bots");
     },
     board: function(gameServer,split) {
         var newLB = [];

@@ -2,6 +2,8 @@
 var BotPlayer = require('./BotPlayer');
 var MyBotPlayer = require('./MyBotPlayer');
 var GreedyBotPlayer = require('./GreedyBotPlayer');
+var RndBotPlayer = require('./RndBotPlayer');
+var EscBotPlayer = require('./EscBotPlayer');
 var FakeSocket = require('./FakeSocket');
 var PacketHandler = require('../PacketHandler');
 
@@ -79,5 +81,31 @@ BotLoader.prototype.addGreedyBot = function() {
 
     // Add to world
     s.packetHandler.setNickname(this.getName("greedybot"));
+
+};
+
+BotLoader.prototype.addRndBot = function() {
+    var s = new FakeSocket(this.gameServer);
+    s.playerTracker = new RndBotPlayer(this.gameServer, s);
+    s.packetHandler = new PacketHandler(this.gameServer, s);
+
+    // Add to client list
+    this.gameServer.clients.push(s);
+
+    // Add to world
+    s.packetHandler.setNickname(this.getName("rndbot"));
+
+};
+
+BotLoader.prototype.addEscBot = function() {
+    var s = new FakeSocket(this.gameServer);
+    s.playerTracker = new EscBotPlayer(this.gameServer, s);
+    s.packetHandler = new PacketHandler(this.gameServer, s);
+
+    // Add to client list
+    this.gameServer.clients.push(s);
+
+    // Add to world
+    s.packetHandler.setNickname(this.getName("escbot"));
 
 };

@@ -232,7 +232,7 @@ MyBotPlayer.prototype.getState = function(cell) {
 
 MyBotPlayer.prototype.decide = function(cell) {
     // The bot decides what to do based on gamestate
-    console.log(this.gameState);
+    //console.log(this.gameState);
     switch (this.gameState) {
         case 0: // Wander
             centerX = this.gameServer.config.borderRight + this.gameServer.config.borderLeft;
@@ -243,7 +243,7 @@ MyBotPlayer.prototype.decide = function(cell) {
             x1 = centerY - cell.position.y + cell.position.x;
             y1 = cell.position.x - centerX + cell.position.y;
             this.mouse = {x: x1, y: y1};
-            console.log(this.mouse);
+            //console.log(this.mouse);
             break;
         case 1: // Looking for food
             //console.log("[Bot] "+cell.getName()+": Getting Food");
@@ -293,7 +293,7 @@ MyBotPlayer.prototype.decide = function(cell) {
                 this.gameServer.splitCells(this);
             }
 
-            console.log(this.mouse);
+            //console.log(this.mouse);
             break;
         case 3: // Target prey
             if ((!this.target) || (cell.mass < (this.target.mass * 1.25)) || (this.visibleNodes.indexOf(this.target) == -1)) {
@@ -322,7 +322,7 @@ MyBotPlayer.prototype.decide = function(cell) {
             break;
         case 4: //Stay away from virus
             var avoid = this.findNearest(cell, this.virus);
-            console.log("Stay Away from Virus");
+            //console.log("Stay Away from Virus");
             // Find angle of vector between cell and predator
             var deltaY = avoid.position.y - cell.position.y;
             var deltaX = avoid.position.x - cell.position.x;
@@ -344,11 +344,27 @@ MyBotPlayer.prototype.decide = function(cell) {
             // console.log("[Bot] "+cell.getName()+": Targeting (virus) "+this.target.getName());
             break;
         case 5: // hide into virus
-            console.log("hide into virus");
+            //console.log("hide into virus");
             this.mouse = {x: this.targetVirus.position.x, y: this.targetVirus.position.y};
             if (this.getDist(cell, this.targetVirus) > this.getDist(this.predators[0], this.targetVirus))
-                console.log("Dont hide in to virus");
+                //console.log("Dont hide in to virus");
                 var avoid = this.combineVectors(this.predators);
+
+                if (!avoid) {
+                    var pos = {x: 0, y: 0};
+                    var check;
+                    for (var i = 0; i < this.predators.length; i++) {
+                        check = this.predators[i];
+                        pos.x += check.position.x;
+                        pos.y += check.position.y;
+                    }
+
+                    // Get avg
+                    pos.x = pos.x/this.predators.length;
+                    pos.y = pos.y/this.predators.length;
+
+                    avoid = pos;
+                }
 
                 // Find angle of vector between cell and predator
                 var deltaY = avoid.y - cell.position.y;
@@ -486,7 +502,7 @@ MyBotPlayer.prototype.checkPath = function(cell,check) {
     var dist = this.getDist(cell,check);
 
     var inRange = Math.atan((2 * cell.getSize())/dist); // Opposite/adjacent
-    console.log(inRange);
+    //console.log(inRange);
     if ((v1 <= (v2 + inRange)) && (v1 >= (v2 - inRange))) {
         // Path collides
         return true;

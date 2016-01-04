@@ -320,7 +320,6 @@ GreedyBotPlayer.prototype.decide = function(cell) {
             break;
         case 4: //Stay away from virus
             var avoid = this.findNearest(cell, this.virus);
-            console.log("Stay Away from Virus");
             // Find angle of vector between cell and predator
             var deltaY = avoid.position.y - cell.position.y;
             var deltaX = avoid.position.x - cell.position.x;
@@ -459,7 +458,7 @@ GreedyBotPlayer.prototype.checkPath = function(cell,check) {
     var dist = this.getDist(cell,check);
 
     var inRange = Math.atan((2 * cell.getSize())/dist); // Opposite/adjacent
-    console.log(inRange);
+    //console.log(inRange);
     if ((v1 <= (v2 + inRange)) && (v1 >= (v2 - inRange))) {
         // Path collides
         return true;

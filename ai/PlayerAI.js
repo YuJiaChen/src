@@ -1,10 +1,18 @@
 var Packet = require('../packet');
-//var PlayerTracker = require('../PlayerTracker');
+var PlayerTracker = require('../PlayerTracker');
+var BotPlayer = require('./BotPlayer');
 var MyBotPlayer = require('./MyBotPlayer');
+var GreedyBotPlayer = require('./GreedyBotPlayer');
+var RndBotPlayer = require('./RndBotPlayer');
+var EscBotPlayer = require('./EscBotPlayer');
 
 function PlayerAI() {
     //PlayerTracker.apply(this, Array.prototype.slice.call(arguments));
+    //BotPlayer.apply(this, Array.prototype.slice.call(arguments));
     MyBotPlayer.apply(this, Array.prototype.slice.call(arguments));
+    //GreedyBotPlayer.apply(this, Array.prototype.slice.call(arguments));
+    //RndBotPlayer.apply(this, Array.prototype.slice.call(arguments));
+    //EscBotPlayer.apply(this, Array.prototype.slice.call(arguments));
     //this.color = gameServer.getRandomColor();
 
     // AI only
@@ -29,7 +37,11 @@ function PlayerAI() {
 
 module.exports = PlayerAI;
 //PlayerAI.prototype = new PlayerTracker();
+//PlayerAI.prototype = new BotPlayer();
 PlayerAI.prototype = new MyBotPlayer();
+//PlayerAI.prototype = new GreedyBotPlayer();
+//PlayerAI.prototype = new RndBotPlayer();
+//PlayerAI.prototype = new EscBotPlayer();
 
 PlayerAI.prototype.update = function() { // Overrides the update function from player tracker
     var updateNodes = []; // Nodes that need to be updated via packet
