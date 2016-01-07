@@ -510,4 +510,3 @@ BotPlayer.prototype.reverseAngle = function(angle) {
     }
     return angle;
 };
-

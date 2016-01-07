@@ -211,7 +211,7 @@ MyBotPlayer.prototype.getState = function(cell) {
     else if (this.predators.length <= 0) {
         if (this.virus.length > 0){
             nearestVirus = this.findNearest(cell, this.virus);
-            if (this.getDist(cell,nearestVirus) < cell.getSize()*2){
+            if (this.getDist(cell,nearestVirus) < cell.getSize()*2 && cell.mass > 120){
                 return 4;
             }
         }
@@ -277,6 +277,7 @@ MyBotPlayer.prototype.decide = function(cell) {
             // Direction to move
             var x1 = cell.position.x + (500 * Math.sin(angle));
             var y1 = cell.position.y + (500 * Math.cos(angle));
+            /*
             if (cell.position.x > 5500)
                 x1 = 4500;
             else if (cell.position.x < 1500)
@@ -284,7 +285,7 @@ MyBotPlayer.prototype.decide = function(cell) {
             if (cell.position.y > 5500)
                 y1 = 4500;
             else if (cell.position.y < 1500)
-                y1 = 2500;
+                y1 = 2500;*/
 
             this.mouse = {x: x1, y: y1};
 
@@ -322,7 +323,7 @@ MyBotPlayer.prototype.decide = function(cell) {
             break;
         case 4: //Stay away from virus
             var avoid = this.findNearest(cell, this.virus);
-            //console.log("Stay Away from Virus");
+            console.log("Stay Away from Virus");
             // Find angle of vector between cell and predator
             var deltaY = avoid.position.y - cell.position.y;
             var deltaX = avoid.position.x - cell.position.x;
@@ -344,27 +345,34 @@ MyBotPlayer.prototype.decide = function(cell) {
             // console.log("[Bot] "+cell.getName()+": Targeting (virus) "+this.target.getName());
             break;
         case 5: // hide into virus
-            //console.log("hide into virus");
             this.mouse = {x: this.targetVirus.position.x, y: this.targetVirus.position.y};
-            if (this.getDist(cell, this.targetVirus) > this.getDist(this.predators[0], this.targetVirus))
-                //console.log("Dont hide in to virus");
+            if (this.getDist(cell, this.targetVirus) > this.getDist(this.predators[0], this.targetVirus)){
+
                 var avoid = this.combineVectors(this.predators);
 
-                if (!avoid) {
+                console.log(avoid);
+                if (!avoid){
+                    list = this.predators;
                     var pos = {x: 0, y: 0};
                     var check;
-                    for (var i = 0; i < this.predators.length; i++) {
-                        check = this.predators[i];
+                    for (var i = 0; i < list.length; i++) {
+                        check = list[i];
                         pos.x += check.position.x;
                         pos.y += check.position.y;
                     }
+                    console.log(pos);
 
                     // Get avg
-                    pos.x = pos.x/this.predators.length;
-                    pos.y = pos.y/this.predators.length;
-
+                    pos.x = pos.x/list.length;
+                    pos.y = pos.y/list.length;
+                    console.log(pos);
                     avoid = pos;
+                    //console.log(this.predators.length);
+                    //console.log(this.predators);
+
                 }
+                
+                //console.log(cell.position);
 
                 // Find angle of vector between cell and predator
                 var deltaY = avoid.y - cell.position.y;
@@ -382,6 +390,7 @@ MyBotPlayer.prototype.decide = function(cell) {
                 var x1 = cell.position.x + (500 * Math.sin(angle));
                 var y1 = cell.position.y + (500 * Math.cos(angle));
                 this.mouse = {x: x1, y:y1};
+            }
             break;
         default:
             //console.log("[Bot] "+cell.getName()+": Idle "+this.gameState);
@@ -502,7 +511,7 @@ MyBotPlayer.prototype.checkPath = function(cell,check) {
     var dist = this.getDist(cell,check);
 
     var inRange = Math.atan((2 * cell.getSize())/dist); // Opposite/adjacent
-    //console.log(inRange);
+    console.log(inRange);
     if ((v1 <= (v2 + inRange)) && (v1 >= (v2 - inRange))) {
         // Path collides
         return true;

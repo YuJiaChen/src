@@ -67,7 +67,7 @@ BotLoader.prototype.addMyBot = function() {
     this.gameServer.clients.push(s);
 
     // Add to world
-    s.packetHandler.setNickname(this.getName("mybot"));
+    s.packetHandler.setNickname(this.getName("betterbot"));
 
 };
 
@@ -106,6 +106,6 @@ BotLoader.prototype.addEscBot = function() {
     this.gameServer.clients.push(s);
 
     // Add to world
-    s.packetHandler.setNickname(this.getName("escbot"));
+    s.packetHandler.setNickname(this.getName("cowardbot"));
 
 };
