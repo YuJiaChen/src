@@ -379,8 +379,9 @@ Commands.list = {
                 console.log(" "+id+" | "+ip+" | "+nick+" | "+cells+" | "+score+" | "+position+" | "+deadTimes);
             } else { 
                 // No cells = dead player or in-menu
-                data = fillChar('DEAD OR NOT PLAYING', '-', ' | CELLS | SCORE  | POSITION     | DEAD'.length + gameServer.config.playerMaxNickLength, true);
-                console.log(" " + id + " | " + ip + " | " + data);
+                data = fillChar('DEAD OR NOT PLAYING', '-', ' | CELLS | SCORE  | POSITION    '.length + gameServer.config.playerMaxNickLength, true);
+                deadTimes = fillChar(client.getDeadTimes(), ' ', 4, true);
+                console.log(" " + id + " | " + ip + " | " + data + " | " + deadTimes);
             }
         }
     },
