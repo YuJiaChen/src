@@ -338,8 +338,8 @@ Commands.list = {
     },
     playerlist: function(gameServer,split) {
         console.log("[Console] Showing " + gameServer.clients.length + " players: ");
-        console.log(" ID         | IP              | "+fillChar('NICK', ' ', gameServer.config.playerMaxNickLength)+" | CELLS | SCORE  | POSITION    "); // Fill space
-        console.log(fillChar('', '-', ' ID         | IP              |  | CELLS | SCORE  | POSITION    '.length + gameServer.config.playerMaxNickLength));
+        console.log(" ID         | IP              | "+fillChar('NICK', ' ', gameServer.config.playerMaxNickLength)+" | CELLS | SCORE  | POSITION     | DEAD"); // Fill space
+        console.log(fillChar('', '-', ' ID         | IP              |  | CELLS | SCORE  | POSITION     | DEAD'.length + gameServer.config.playerMaxNickLength));
         for (var i = 0; i < gameServer.clients.length; i++) {
             var client = gameServer.clients[i].playerTracker;
 
@@ -354,7 +354,7 @@ Commands.list = {
             ip = fillChar(ip, ' ', 15);
 
             // Get name and data
-            var nick = '', cells = '', score = '', position = '', data = '';
+            var nick = '', cells = '', score = '', position = '', deadTimes = '', data = '';
             if (client.spectate) {
                 try { 
                     // Get spectated player
@@ -368,17 +368,18 @@ Commands.list = {
                     nick = "";
                 }
                 nick = (nick == "") ? "An unnamed cell" : nick;
-                data = fillChar("SPECTATING: " + nick, '-', ' | CELLS | SCORE  | POSITION    '.length + gameServer.config.playerMaxNickLength, true);
+                data = fillChar("SPECTATING: " + nick, '-', ' | CELLS | SCORE  | POSITION     | DEAD'.length + gameServer.config.playerMaxNickLength, true);
                 console.log(" " + id + " | " + ip + " | " + data);
             } else if (client.cells.length > 0) {
                 nick = fillChar((client.name == "") ? "An unnamed cell" : client.name, ' ', gameServer.config.playerMaxNickLength);
                 cells = fillChar(client.cells.length, ' ', 5, true);
                 score = fillChar(client.getScore(true), ' ', 6, true);
                 position = fillChar(client.centerPos.x >> 0, ' ', 5, true) + ', ' + fillChar(client.centerPos.y >> 0, ' ', 5, true);
-                console.log(" "+id+" | "+ip+" | "+nick+" | "+cells+" | "+score+" | "+position);
+                deadTimes = fillChar(client.getDeadTimes(), ' ', 4, true);
+                console.log(" "+id+" | "+ip+" | "+nick+" | "+cells+" | "+score+" | "+position+" | "+deadTimes);
             } else { 
                 // No cells = dead player or in-menu
-                data = fillChar('DEAD OR NOT PLAYING', '-', ' | CELLS | SCORE  | POSITION    '.length + gameServer.config.playerMaxNickLength, true);
+                data = fillChar('DEAD OR NOT PLAYING', '-', ' | CELLS | SCORE  | POSITION     | DEAD'.length + gameServer.config.playerMaxNickLength, true);
                 console.log(" " + id + " | " + ip + " | " + data);
             }
         }

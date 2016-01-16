@@ -143,7 +143,10 @@ PlayerAI.prototype.update = function() { // Overrides the update function from p
     }
 
     // Check if player is dead
-    if (this.cells.length <= 0) return;
+    if (this.cells.length <= 0) {
+        this.deadTimes++;
+        return;
+    }
 
     // Calc predators/prey
     var cell = this.getLowestCell();

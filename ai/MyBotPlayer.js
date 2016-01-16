@@ -79,6 +79,7 @@ MyBotPlayer.prototype.update = function() { // Overrides the update function fro
     // Respawn if bot is dead
     if (this.cells.length <= 0) {
         this.gameServer.gameMode.onPlayerSpawn(this.gameServer,this);
+        this.deadTimes++;
         if (this.cells.length == 0) {
             // If the bot cannot spawn any cells, then disconnect it
             this.socket.close();
@@ -323,7 +324,7 @@ MyBotPlayer.prototype.decide = function(cell) {
             break;
         case 4: //Stay away from virus
             var avoid = this.findNearest(cell, this.virus);
-            console.log("Stay Away from Virus");
+            //console.log("Stay Away from Virus");
             // Find angle of vector between cell and predator
             var deltaY = avoid.position.y - cell.position.y;
             var deltaX = avoid.position.x - cell.position.x;
@@ -350,7 +351,7 @@ MyBotPlayer.prototype.decide = function(cell) {
 
                 var avoid = this.combineVectors(this.predators);
 
-                console.log(avoid);
+                //console.log(avoid);
                 if (!avoid){
                     list = this.predators;
                     var pos = {x: 0, y: 0};
@@ -360,12 +361,12 @@ MyBotPlayer.prototype.decide = function(cell) {
                         pos.x += check.position.x;
                         pos.y += check.position.y;
                     }
-                    console.log(pos);
+                    //console.log(pos);
 
                     // Get avg
                     pos.x = pos.x/list.length;
                     pos.y = pos.y/list.length;
-                    console.log(pos);
+                    //console.log(pos);
                     avoid = pos;
                     //console.log(this.predators.length);
                     //console.log(this.predators);
@@ -511,7 +512,7 @@ MyBotPlayer.prototype.checkPath = function(cell,check) {
     var dist = this.getDist(cell,check);
 
     var inRange = Math.atan((2 * cell.getSize())/dist); // Opposite/adjacent
-    console.log(inRange);
+    //console.log(inRange);
     if ((v1 <= (v2 + inRange)) && (v1 >= (v2 - inRange))) {
         // Path collides
         return true;

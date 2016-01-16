@@ -12,6 +12,7 @@ function PlayerTracker(gameServer, socket) {
     this.visibleNodes = [];
     this.cells = [];
     this.score = 0; // Needed for leaderboard
+    this.deadTimes = 0;
 
     this.mouse = {x: 0, y: 0};
     this.mouseCells = []; // For individual cell movement
@@ -64,6 +65,10 @@ PlayerTracker.prototype.getScore = function(reCalcScore) {
     }
     return this.score >> 0;
 };
+
+PlayerTracker.prototype.getDeadTimes = function() {
+    return this.deadTimes;
+}
 
 PlayerTracker.prototype.setColor = function(color) {
     this.color.r = color.r;

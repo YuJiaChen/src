@@ -80,6 +80,7 @@ GreedyBotPlayer.prototype.update = function() { // Overrides the update function
     // Respawn if bot is dead
     if (this.cells.length <= 0) {
         this.gameServer.gameMode.onPlayerSpawn(this.gameServer,this);
+        this.deadTimes++;
         if (this.cells.length == 0) {
             // If the bot cannot spawn any cells, then disconnect it
             this.socket.close();
